@@ -1,15 +1,19 @@
-<template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+<template >
+  <div class="bg-light-yellow">
+  <FootballResults  class="w-50 dib"/>
+  <CurrentMatch class="w-50 dib bl" />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import FootballResults from './components/FootballResults.vue'
+import CurrentMatch from './components/CurrentMatch.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FootballResults,
+    CurrentMatch
   }
 }
 </script>
