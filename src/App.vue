@@ -1,21 +1,70 @@
 <template >
-  <div class="bg-light-yellow">
-  <FootballResults  class="w-50 dib"/>
-  <CurrentMatch class="w-50 dib bl" />
+  <div @click="playSound">
+    {{ data }}
+
+    <div class="w-100">
+      <transition name="fade" mode="out-in">
+        <img v-if="!data" src="./assets/background.png" />
+        <div v-else class="bg-light-yellow">
+          <FootballResults class="w-50 fl" />
+          <CurrentMatch class="w-50 dib bl" />
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import FootballResults from './components/FootballResults.vue'
-import CurrentMatch from './components/CurrentMatch.vue'
+import { useClient, useQuery } from "villus";
+import { Howl } from "howler";
+
+import FootballResults from "./components/FootballResults.vue";
+import CurrentMatch from "./components/CurrentMatch.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     FootballResults,
-    CurrentMatch
-  }
-}
+    CurrentMatch,
+  },
+  data: function () {
+    return {
+      show: true,
+    };
+  },
+  methods: {
+    playSound: function () {
+      var sound = new Howl({
+        src: "./em_1992.mp3",
+        autoplay: true,
+        loop: true,
+        volume: 0.5,
+      });
+      sound.play();
+    },
+  },
+
+  setup() {
+    useClient({
+      url:
+        "https://hs-fusball-iot-project.azurewebsites.net/api/graphql?code=kzk8OwLC6d4JJQBswGg7Jpgm3LazPnADxNyGeWJPsk5iQse5uKwJyg==",
+    });
+
+    const getForTeam = `
+      query {
+        getForTeam(teamId: "red") {
+          id
+        }
+      }
+    `;
+
+    const { data } = useQuery({
+      query: getForTeam,
+    });
+
+    return { data };
+  },
+};
 </script>
 
 <style>
@@ -26,5 +75,13 @@ export default {
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+  opacity: 0;
 }
 </style>

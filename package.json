@@ -9,6 +9,9 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "graphql": "^15.4.0",
+    "howler": "^2.2.1",
+    "villus": "^1.0.0-rc.8",
     "vue": "^3.0.0"
   },
   "devDependencies": {
