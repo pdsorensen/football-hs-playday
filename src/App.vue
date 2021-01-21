@@ -1,12 +1,10 @@
 <template >
   <div @click="playSound">
-    {{ data }}
-
     <div class="w-100">
       <transition name="fade" mode="out-in">
         <img v-if="!data" src="./assets/background.png" />
         <div v-else class="bg-light-yellow">
-          <FootballResults class="w-50 fl" />
+          <FootballResults :goals="data.getGoals" class="w-50 fl" />
           <CurrentMatch class="w-50 dib bl" />
         </div>
       </transition>
@@ -16,7 +14,7 @@
 
 <script>
 import { useClient, useQuery } from "villus";
-import { Howl } from "howler";
+// import { Howl } from "howler";
 
 import FootballResults from "./components/FootballResults.vue";
 import CurrentMatch from "./components/CurrentMatch.vue";
@@ -34,32 +32,33 @@ export default {
   },
   methods: {
     playSound: function () {
-      var sound = new Howl({
-        src: "./em_1992.mp3",
-        autoplay: true,
-        loop: true,
-        volume: 0.5,
-      });
-      sound.play();
+      // var sound = new Howl({
+      //   src: "./em_1992.mp3",
+      //   autoplay: true,
+      //   loop: true,
+      //   volume: 0.5,
+      // });
+      // sound.play();
     },
   },
 
   setup() {
     useClient({
-      url:
-        "https://hs-fusball-iot-project.azurewebsites.net/api/graphql?code=kzk8OwLC6d4JJQBswGg7Jpgm3LazPnADxNyGeWJPsk5iQse5uKwJyg==",
+      url: "https://hs-fusball-iot-project.azurewebsites.net/api/gql-api",
     });
 
-    const getForTeam = `
+    const getGoals = `
       query {
-        getForTeam(teamId: "red") {
+        getGoals {
           id
+          teamId
+          created_on
         }
       }
     `;
 
     const { data } = useQuery({
-      query: getForTeam,
+      query: getGoals,
     });
 
     return { data };
@@ -72,7 +71,6 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
   color: #2c3e50;
   margin-top: 60px;
 }
