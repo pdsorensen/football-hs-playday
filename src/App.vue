@@ -1,5 +1,6 @@
 <template >
   <div @click="playSound">
+    {{ goals_white }} : {{ goals_red }}
     <div class="w-100">
       <transition name="fade" mode="out-in">
         <img v-if="!data" src="./assets/background.png" />
@@ -13,12 +14,38 @@
 </template>
 
 <script>
+import { ref } from "vue";
 import { useClient, useQuery } from "villus";
 const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
 
 import FootballResults from "./components/FootballResults.vue";
 import CurrentMatch from "./components/CurrentMatch.vue";
+
+const connect = () => {
+  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+
+  const connection = new signalR.HubConnectionBuilder()
+    .withUrl(`${connectionUrl}/api`)
+    .build();
+
+  connection.onclose(() => {
+    console.log("SignalR connection disconnected");
+    setTimeout(() => this.connect(), 2000);
+  });
+
+  // connection.on("updated", (updatedStock) => {
+  //   console.log("updating!", updatedStock);
+  //   // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
+  //   // app.stocks.splice(index, 1, updatedStock);
+  // });
+
+  connection.start().then(() => {
+    console.log("SignalR connection established");
+  });
+
+  return connection;
+};
 
 export default {
   name: "App",
@@ -41,9 +68,52 @@ export default {
       // });
       // sound.play();
     },
+    // connect: function () {
+    //   // signalR
+    //   const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+
+    //   const connection = new signalR.HubConnectionBuilder()
+    //     .withUrl(`${connectionUrl}/api`)
+    //     .build();
+
+    //   connection.onclose(() => {
+    //     console.log("SignalR connection disconnected");
+    //     setTimeout(() => this.connect(), 2000);
+    //   });
+
+    //   connection.on("updated", (updatedStock) => {
+    //     console.log("updating!", updatedStock);
+    //     // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
+    //     // app.stocks.splice(index, 1, updatedStock);
+    //   });
+
+    //   connection.start().then(() => {
+    //     console.log("SignalR connection established");
+    //   });
+    // },
   },
 
   setup() {
+    const goals_red = ref(0);
+    const goals_white = ref(0);
+
+    // signalr
+    let connection = connect();
+    console.log(connection);
+
+    connection.on("updated", (goal) => {
+      if (goal.teamId == "White") {
+        goals_white.value++;
+      }
+
+      if (goal.teamId == "Red") {
+        goals_red.value++;
+      }
+
+      console.log("updating!", goal);
+    });
+
+    // fetch initial goals
     useClient({
       url: "https://hs-fusball-iot-project.azurewebsites.net/api/gql-api",
     });
@@ -61,29 +131,7 @@ export default {
       query: getGoals,
     });
 
-    const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
-
-    // signalR
-    const connection = new signalR.HubConnectionBuilder()
-      .withUrl(`${connectionUrl}/api`)
-      .build();
-
-    connection.onclose(() => {
-      console.log("SignalR connection disconnected");
-      // setTimeout(() => connect(), 2000);
-    });
-
-    connection.on("updated", (updatedStock) => {
-      console.log("updating!", updatedStock);
-      // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
-      // app.stocks.splice(index, 1, updatedStock);
-    });
-
-    connection.start().then(() => {
-      console.log("SignalR connection established");
-    });
-
-    return { data };
+    return { data, goals_red, goals_white };
   },
 };
 </script>
