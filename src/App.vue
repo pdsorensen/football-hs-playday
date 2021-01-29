@@ -1,15 +1,17 @@
 <template >
   <div @click="playSound">
-    {{ goals_white }} : {{ goals_red }}
-    <div class="w-100">
-      <transition name="fade" mode="out-in">
-        <img v-if="!data" src="./assets/background.png" />
-        <div v-else class="bg-light-yellow">
-          <FootballResults :goals="data.getGoals" class="w-50 fl" />
-          <CurrentMatch class="w-50 dib bl" />
-        </div>
-      </transition>
-    </div>
+    <transition name="fade" mode="out-in">
+      <div v-if="!playing">
+        <StartMatchForm @matchSelected="initiateMatch" class="w-50 dib" />
+      </div>
+      <div v-else class="w-80 center">
+        <FootballResults :red="goals_red" :white="goals_white" />
+        <!-- <div>
+          <div class="w-60 mt5 fl">Running Score</div>
+          <div class="w-40 mt5 fl">Running Score</div>
+        </div> -->
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -20,45 +22,23 @@ const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
 
 import FootballResults from "./components/FootballResults.vue";
-import CurrentMatch from "./components/CurrentMatch.vue";
-
-const connect = () => {
-  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
-
-  const connection = new signalR.HubConnectionBuilder()
-    .withUrl(`${connectionUrl}/api`)
-    .build();
-
-  connection.onclose(() => {
-    console.log("SignalR connection disconnected");
-    setTimeout(() => this.connect(), 2000);
-  });
-
-  // connection.on("updated", (updatedStock) => {
-  //   console.log("updating!", updatedStock);
-  //   // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
-  //   // app.stocks.splice(index, 1, updatedStock);
-  // });
-
-  connection.start().then(() => {
-    console.log("SignalR connection established");
-  });
-
-  return connection;
-};
+import StartMatchForm from "./components/StartMatchForm.vue";
 
 export default {
   name: "App",
   components: {
     FootballResults,
-    CurrentMatch,
+    StartMatchForm,
   },
   data: function () {
     return {
-      show: true,
+      playing: true,
     };
   },
   methods: {
+    initiateMatch: function () {
+      this.playing = true;
+    },
     playSound: function () {
       // var sound = new Howl({
       //   src: "./em_1992.mp3",
@@ -68,29 +48,6 @@ export default {
       // });
       // sound.play();
     },
-    // connect: function () {
-    //   // signalR
-    //   const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
-
-    //   const connection = new signalR.HubConnectionBuilder()
-    //     .withUrl(`${connectionUrl}/api`)
-    //     .build();
-
-    //   connection.onclose(() => {
-    //     console.log("SignalR connection disconnected");
-    //     setTimeout(() => this.connect(), 2000);
-    //   });
-
-    //   connection.on("updated", (updatedStock) => {
-    //     console.log("updating!", updatedStock);
-    //     // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
-    //     // app.stocks.splice(index, 1, updatedStock);
-    //   });
-
-    //   connection.start().then(() => {
-    //     console.log("SignalR connection established");
-    //   });
-    // },
   },
 
   setup() {
@@ -99,9 +56,9 @@ export default {
 
     // signalr
     let connection = connect();
-    console.log(connection);
 
     connection.on("updated", (goal) => {
+      console.log(goal);
       if (goal.teamId == "White") {
         goals_white.value++;
       }
@@ -109,8 +66,6 @@ export default {
       if (goal.teamId == "Red") {
         goals_red.value++;
       }
-
-      console.log("updating!", goal);
     });
 
     // fetch initial goals
@@ -134,6 +89,25 @@ export default {
     return { data, goals_red, goals_white };
   },
 };
+
+const connect = () => {
+  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+
+  const connection = new signalR.HubConnectionBuilder()
+    .withUrl(`${connectionUrl}/api`)
+    .build();
+
+  connection.onclose(() => {
+    console.log("SignalR connection disconnected");
+    setTimeout(() => this.connect(), 2000);
+  });
+
+  connection.start().then(() => {
+    console.log("SignalR connection established");
+  });
+
+  return connection;
+};
 </script>
 
 <style>
@@ -141,8 +115,13 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+  color: white;
+  background: url("./assets/background.png") no-repeat center center fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100vh;
 }
 
 .fade-enter-active,
