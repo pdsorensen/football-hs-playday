@@ -50,7 +50,6 @@ export default {
     const getGoals = `
       query {
         getGoals {
-          id
           teamId
           created_on
         }
