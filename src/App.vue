@@ -14,6 +14,7 @@
 
 <script>
 import { useClient, useQuery } from "villus";
+const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
 
 import FootballResults from "./components/FootballResults.vue";
@@ -58,6 +59,28 @@ export default {
 
     const { data } = useQuery({
       query: getGoals,
+    });
+
+    const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+
+    // signalR
+    const connection = new signalR.HubConnectionBuilder()
+      .withUrl(`${connectionUrl}/api`)
+      .build();
+
+    connection.onclose(() => {
+      console.log("SignalR connection disconnected");
+      // setTimeout(() => connect(), 2000);
+    });
+
+    connection.on("updated", (updatedStock) => {
+      console.log("updating!", updatedStock);
+      // const index = app.stocks.findIndex(s => s.id === updatedStock.id);
+      // app.stocks.splice(index, 1, updatedStock);
+    });
+
+    connection.start().then(() => {
+      console.log("SignalR connection established");
     });
 
     return { data };
