@@ -1,5 +1,8 @@
 <template >
   <div @click="playSound">
+    <router-link to="/players/create">Create player</router-link>
+    <router-view></router-view>
+
     <transition name="fade" mode="out-in">
       <div v-if="!playing">
         <StartMatchForm @matchSelected="initiateMatch" class="w-50 dib" />

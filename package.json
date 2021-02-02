@@ -14,7 +14,8 @@
     "howler": "^2.2.1",
     "moment": "^2.29.1",
     "villus": "^1.0.0-rc.8",
-    "vue": "^3.0.0"
+    "vue": "^3.0.0",
+    "vue-router": "^4.0.3"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
