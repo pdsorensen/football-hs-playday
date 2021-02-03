@@ -1,10 +1,11 @@
 <template>
   <div class="pt6">
     <div class="w-40 f1 fl center tc">
-      RED:
+      RED
       <div class="mt6">
         <div class="w-100 fl">
-          <img src="./../assets/Thomas.jpg" />
+          <img src="./../assets/Kasper.jpg" />
+          <img src="./../assets/Mikkel.jpg" />
         </div>
         <!-- <div class="w-50 fl">
           <img src="./../assets/Isabel.jpg" />
@@ -15,10 +16,11 @@
       <div class="f1">{{ red }} : {{ white }}</div>
     </div>
     <div class="w-40 f1 fl center tc">
-      WHITE:
+      WHITE
       <div class="mt6">
         <div class="w-100 fl">
-          <img src="./../assets/Mikkel.jpg" />
+          <img src="./../assets/Mads.jpg" />
+          <img src="./../assets/niels_jacob.jpg" />
         </div>
         <!-- <div class="w-50 fl">
           <img src="./../assets/Svend.jpg" />

@@ -1,37 +1,33 @@
 <template >
   <div @click="playSound">
-    <router-link to="/players/create">Create player</router-link>
-    <router-view></router-view>
+    <FootballResults :red="goals_red" :white="goals_white" />
 
-    <transition name="fade" mode="out-in">
-      <div v-if="!playing">
-        <StartMatchForm @matchSelected="initiateMatch" class="w-50 dib" />
-      </div>
-      <div v-else class="w-80 center">
-        <FootballResults :red="goals_red" :white="goals_white" />
-        <!-- <div>
-          <div class="w-60 mt5 fl">Running Score</div>
-          <div class="w-40 mt5 fl">Running Score</div>
-        </div> -->
-      </div>
-    </transition>
+    <!-- <div>
+      <router-link to="/players/create">Create player</router-link>
+      <router-link to="/matches/current">Current match</router-link>
+    </div>
+
+    
+    <router-view v-slot="{ Component }"> -->
+    <!-- Use any custom transition and fallback to `fade` -->
+    <!-- <transition name="fade"> -->
+    <!-- <component :is="Component" /> -->
+    <!-- </transition> -->
+    <!-- </router-view> -->
   </div>
 </template>
 
 <script>
 import { ref } from "vue";
-import { useClient, useQuery } from "villus";
+import { useClient } from "villus";
+import FootballResults from "./components/FootballResults";
 const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
-
-import FootballResults from "./components/FootballResults.vue";
-import StartMatchForm from "./components/StartMatchForm.vue";
 
 export default {
   name: "App",
   components: {
     FootballResults,
-    StartMatchForm,
   },
   data: function () {
     return {
@@ -39,9 +35,6 @@ export default {
     };
   },
   methods: {
-    initiateMatch: function () {
-      this.playing = true;
-    },
     playSound: function () {
       // var sound = new Howl({
       //   src: "./em_1992.mp3",
@@ -76,20 +69,20 @@ export default {
       url: "https://hs-fusball-iot-project.azurewebsites.net/api/gql-api",
     });
 
-    const getGoals = `
-      query {
-        getGoals {
-          teamId
-          created_on
-        }
-      }
-    `;
+    // const getGoals = `
+    //   query {
+    //     getGoals {
+    //       teamId
+    //       created_on
+    //     }
+    //   }
+    // `;
 
-    const { data } = useQuery({
-      query: getGoals,
-    });
+    // const { data } = useQuery({
+    //   query: getGoals,
+    // });
 
-    return { data, goals_red, goals_white };
+    return { goals_red, goals_white };
   },
 };
 
@@ -129,7 +122,7 @@ const connect = () => {
 
 .fade-enter-active,
 .fade-leave-active {
-  transition: opacity 1s;
+  transition: opacity 0.5s;
 }
 .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
   opacity: 0;

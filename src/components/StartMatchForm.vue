@@ -53,7 +53,7 @@ export default {
   emits: ["matchSelected"],
   methods: {
     startMatch: function () {
-      this.$emit("matchSelected");
+      // this.playing = true;
     },
   },
 };
