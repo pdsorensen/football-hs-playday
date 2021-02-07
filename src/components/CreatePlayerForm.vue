@@ -18,26 +18,36 @@
       />
     </div>
 
-    <div class="w-20 dib" v-for="image in images" :key="image">
-      <img :src="`./../pictures/${image}`" />
+    <div
+      @click="setImageUrl(image)"
+      class="w-20 dib"
+      v-for="image in images"
+      :key="image"
+    >
+      <img :class="getImageClasses(image)" :src="`./../pictures/${image}`" />
     </div>
 
     <div class="w-100">
       <p>{{ nickname }} : {{ name }} - {{ photo_url }}</p>
     </div>
+
+    <input
+      class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+      type="submit"
+      value="Create"
+      @click="createPlayer()"
+    />
   </div>
 </template>
 
 <script>
 import { useMutation } from "villus";
+import { ref } from "vue";
 
 export default {
   name: "App",
   data: function () {
     return {
-      nickname: "",
-      name: "",
-      photo_url: "",
       images: [
         "christian_n.jpg",
         "isabel.jpg",
@@ -56,39 +66,72 @@ export default {
       ],
     };
   },
-  methods: {
-    onSubmit: function () {
-      console.log(this.this.execute);
-      //   this.execute(this.data.variables).then((result) => {
-      //     if (result.error) {
-      //       console.log(result.error);
-      //       // Do something
-      //     } else {
-      //       console.log("nothing bad happened");
-      //     }
-      //   });
-    },
-  },
-
   setup() {
+    let nickname = ref("");
+    let name = ref("");
+    let photo_url = ref("");
+
     const CreatePlayer = `
-        mutation createPlayer {
-            createPlayer(
-                input: {
-                name: $name
-                nickname: $nickname
-                photo_url: $picture_url
-                }
-            ) {
+        mutation createPlayer($input: PlayerInput!) {
+            createPlayer(input: $input) {
                 id
             }
         }
     `;
 
+    function getImageClasses(image) {
+      if (image === photo_url.value) {
+        return "selected";
+      }
+
+      return "";
+    }
+
+    function setImageUrl(image) {
+      photo_url.value = image;
+    }
+
     const { execute } = useMutation(CreatePlayer);
 
-    return { execute };
+    function createPlayer() {
+      const variables = {
+        nickname: nickname.value,
+        name: name.value,
+        photo_url: photo_url.value,
+      };
+
+      execute({ input: variables }).then((result) => {
+        if (result.error) {
+          console.log(result.error);
+          // Do something
+        } else {
+          console.log("nothing bad happened");
+        }
+      });
+    }
+
+    return {
+      createPlayer,
+      getImageClasses,
+      setImageUrl,
+      nickname,
+      name,
+      photo_url,
+    };
   },
 };
 </script>
 
+<style scoped>
+img {
+  opacity: 50%;
+}
+
+img:hover {
+  opacity: 100%;
+}
+
+.selected {
+  opacity: 100%;
+}
+</style>

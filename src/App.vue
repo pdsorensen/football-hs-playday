@@ -1,19 +1,18 @@
 <template >
   <div @click="playSound">
-    <FootballResults :red="goals_red" :white="goals_white" />
+    <!-- <FootballResults :red="goals_red" :white="goals_white" /> -->
 
-    <!-- <div>
+    <div>
       <router-link to="/players/create">Create player</router-link>
       <router-link to="/matches/current">Current match</router-link>
     </div>
 
-    
-    <router-view v-slot="{ Component }"> -->
-    <!-- Use any custom transition and fallback to `fade` -->
-    <!-- <transition name="fade"> -->
-    <!-- <component :is="Component" /> -->
-    <!-- </transition> -->
-    <!-- </router-view> -->
+    <router-view v-slot="{ Component }">
+      <!-- Use any custom transition and fallback to `fade` -->
+      <!-- <transition name="fade"> -->
+      <component :is="Component" />
+      <!-- </transition> -->
+    </router-view>
   </div>
 </template>
 
