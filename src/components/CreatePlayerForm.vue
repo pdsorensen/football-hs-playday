@@ -50,7 +50,7 @@ export default {
     return {
       images: [
         "christian_n.jpg",
-        "isabel.jpg",
+        "isabel.png",
         "jacob_jepsen.jpg",
         "Jacob_S.jpg",
         "Kasper.jpg",
@@ -124,7 +124,7 @@ export default {
 
 <style scoped>
 img {
-  opacity: 50%;
+  opacity: 40%;
 }
 
 img:hover {
