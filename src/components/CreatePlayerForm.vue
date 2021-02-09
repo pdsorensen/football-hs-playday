@@ -1,51 +1,68 @@
 <template>
-  <div class="measure center w-50 mt5">
-    <div class="w-100">
-      <label for="name" class="f6 b db mb2">Name </label>
+  <div>
+    <div class="fl w-50">
+      <div class="w-100">
+        <label for="name" class="f6 b db mb2">Name </label>
+        <input
+          v-model="name"
+          class="input-reset ba b--black-20 pa2 mb2 db w-100"
+          type="text"
+        />
+      </div>
+
+      <div class="w-100">
+        <label for="name" class="f6 b db mb2">Nickname </label>
+        <input
+          v-model="nickname"
+          class="input-reset ba b--black-20 pa2 mb2 db w-100"
+          type="text"
+        />
+      </div>
+
+      <div
+        @click="setImageUrl(image)"
+        :class="getImageClasses(image)"
+        v-for="image in images"
+        :key="image"
+      >
+        <img :src="`./../pictures/${image}`" />
+      </div>
+
+      <div class="w-100">
+        <p>{{ nickname }} : {{ name }} - {{ photo_url }}</p>
+      </div>
+
       <input
-        v-model="name"
-        class="input-reset ba b--black-20 pa2 mb2 db w-100"
-        type="text"
+        class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
+        type="submit"
+        value="Create"
+        @click="createPlayer()"
       />
     </div>
 
-    <div class="w-100">
-      <label for="name" class="f6 b db mb2">Nickname </label>
-      <input
-        v-model="nickname"
-        class="input-reset ba b--black-20 pa2 mb2 db w-100"
-        type="text"
-      />
+    <div class="w-50 fl">
+      <Suspense>
+        <template #default>
+          <PlayerList />
+        </template>
+        <template #fallback>
+          <div>Loading players</div>
+        </template>
+      </Suspense>
     </div>
-
-    <div
-      @click="setImageUrl(image)"
-      :class="getImageClasses(image)"
-      v-for="image in images"
-      :key="image"
-    >
-      <img :src="`./../pictures/${image}`" />
-    </div>
-
-    <div class="w-100">
-      <p>{{ nickname }} : {{ name }} - {{ photo_url }}</p>
-    </div>
-
-    <input
-      class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
-      type="submit"
-      value="Create"
-      @click="createPlayer()"
-    />
   </div>
 </template>
 
 <script>
 import { useMutation } from "villus";
 import { ref } from "vue";
+import PlayerList from "./PlayerList";
 
 export default {
   name: "App",
+  components: {
+    PlayerList,
+  },
   data: function () {
     return {
       images: [
