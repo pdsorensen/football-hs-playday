@@ -20,11 +20,11 @@
 
     <div
       @click="setImageUrl(image)"
-      class="w-20 dib"
+      :class="getImageClasses(image)"
       v-for="image in images"
       :key="image"
     >
-      <img :class="getImageClasses(image)" :src="`./../pictures/${image}`" />
+      <img :src="`./../pictures/${image}`" />
     </div>
 
     <div class="w-100">
@@ -80,11 +80,13 @@ export default {
     `;
 
     function getImageClasses(image) {
+      let basesClasses = "w-20 dib glow ";
+
       if (image === photo_url.value) {
-        return "selected";
+        return basesClasses + "o-100";
       }
 
-      return "";
+      return basesClasses + "o-50";
     }
 
     function setImageUrl(image) {
@@ -121,17 +123,3 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-img {
-  opacity: 40%;
-}
-
-img:hover {
-  opacity: 100%;
-}
-
-.selected {
-  opacity: 100%;
-}
-</style>
