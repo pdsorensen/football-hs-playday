@@ -36,14 +36,14 @@
         class="b ph3 pv2 input-reset ba b--black bg-transparent grow pointer f6 dib"
         type="submit"
         value="Create"
-        @click="createPlayer()"
+        @click="createPlayer({ nickname, name, photo_url })"
       />
     </div>
 
     <div class="w-50 fl">
       <Suspense>
         <template #default>
-          <PlayerList />
+          <PlayerList :players="players" />
         </template>
         <template #fallback>
           <div>Loading players</div>
@@ -54,9 +54,9 @@
 </template>
 
 <script>
-import { useMutation } from "villus";
 import { ref } from "vue";
 import PlayerList from "./PlayerList";
+import usePlayers from "./../hooks/usePlayers";
 
 export default {
   name: "App",
@@ -88,15 +88,7 @@ export default {
     let name = ref("");
     let photo_url = ref("");
 
-    const CreatePlayer = `
-        mutation createPlayer($input: PlayerInput!) {
-            createPlayer(input: $input) {
-                id
-            }
-        }
-    `;
-
-    function getImageClasses(image) {
+    const getImageClasses = (image) => {
       let basesClasses = "w-20 dib glow ";
 
       if (image === photo_url.value) {
@@ -104,32 +96,14 @@ export default {
       }
 
       return basesClasses + "o-50";
-    }
+    };
 
-    function setImageUrl(image) {
-      photo_url.value = image;
-    }
+    const setImageUrl = (image) => (photo_url.value = image);
 
-    const { execute } = useMutation(CreatePlayer);
-
-    function createPlayer() {
-      const variables = {
-        nickname: nickname.value,
-        name: name.value,
-        photo_url: photo_url.value,
-      };
-
-      execute({ input: variables }).then((result) => {
-        if (result.error) {
-          console.log(result.error);
-          // Do something
-        } else {
-          console.log("nothing bad happened");
-        }
-      });
-    }
+    const { players, createPlayer } = usePlayers();
 
     return {
+      players,
       createPlayer,
       getImageClasses,
       setImageUrl,

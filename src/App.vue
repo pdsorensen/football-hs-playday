@@ -19,15 +19,11 @@
 <script>
 import { ref } from "vue";
 import { useClient } from "villus";
-import FootballResults from "./components/FootballResults";
 const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
 
 export default {
   name: "App",
-  components: {
-    FootballResults,
-  },
   data: function () {
     return {
       playing: true,
