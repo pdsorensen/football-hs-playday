@@ -32,13 +32,15 @@
 
 <script>
 // import moment from "moment";
+import { ref } from "vue";
+const signalR = require("@microsoft/signalr");
 
 export default {
   name: "Results",
-  props: {
-    white: Number,
-    red: Number,
-  },
+  // props: {
+  //   white: Number,
+  //   red: Number,
+  // },
   // methods: {
   //   formatDate(date) {
   //     return moment(date).format("MMM DD HH:mm");
@@ -58,6 +60,47 @@ export default {
   //     return formatted;
   //   },
   // },
+  setup() {
+    const red = ref(0);
+    const white = ref(0);
+
+    // signalr
+    let connection = connect();
+
+    connection.on("updated", (goal) => {
+      console.log(goal);
+      if (goal.teamId == "White") {
+        white.value++;
+      }
+
+      if (goal.teamId == "Red") {
+        red.value++;
+      }
+    });
+
+    // fetch initial goals
+
+    return { red, white };
+  },
+};
+
+const connect = () => {
+  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+
+  const connection = new signalR.HubConnectionBuilder()
+    .withUrl(`${connectionUrl}/api`)
+    .build();
+
+  connection.onclose(() => {
+    console.log("SignalR connection disconnected");
+    setTimeout(() => this.connect(), 2000);
+  });
+
+  connection.start().then(() => {
+    console.log("SignalR connection established");
+  });
+
+  return connection;
 };
 </script>
 

@@ -17,9 +17,7 @@
 </template>
 
 <script>
-import { ref } from "vue";
 import { useClient } from "villus";
-const signalR = require("@microsoft/signalr");
 // import { Howl } from "howler";
 
 export default {
@@ -42,62 +40,10 @@ export default {
   },
 
   setup() {
-    const goals_red = ref(0);
-    const goals_white = ref(0);
-
-    // signalr
-    let connection = connect();
-
-    connection.on("updated", (goal) => {
-      console.log(goal);
-      if (goal.teamId == "White") {
-        goals_white.value++;
-      }
-
-      if (goal.teamId == "Red") {
-        goals_red.value++;
-      }
-    });
-
-    // fetch initial goals
     useClient({
       url: "https://hs-fusball-iot-project.azurewebsites.net/api/gql-api",
     });
-
-    // const getGoals = `
-    //   query {
-    //     getGoals {
-    //       teamId
-    //       created_on
-    //     }
-    //   }
-    // `;
-
-    // const { data } = useQuery({
-    //   query: getGoals,
-    // });
-
-    return { goals_red, goals_white };
   },
-};
-
-const connect = () => {
-  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
-
-  const connection = new signalR.HubConnectionBuilder()
-    .withUrl(`${connectionUrl}/api`)
-    .build();
-
-  connection.onclose(() => {
-    console.log("SignalR connection disconnected");
-    setTimeout(() => this.connect(), 2000);
-  });
-
-  connection.start().then(() => {
-    console.log("SignalR connection established");
-  });
-
-  return connection;
 };
 </script>
 
