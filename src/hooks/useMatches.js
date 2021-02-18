@@ -1,6 +1,6 @@
 import { ref, computed } from "vue";
-// import { useQuery, useMutation } from "villus";
-// import { CreateMatch } from "./../graphql/mutations.js";
+import { useMutation } from "villus";
+import { StartMatch } from "./../graphql/mutations.js";
 // import { GetMatches } from "./../graphql/queries.js";
 
 const matches = ref([])
@@ -8,7 +8,7 @@ const matches = ref([])
 export default function useMatches() {
     const loading = ref(true)
 
-    // const { execute: CreateMatch } = useMutation(CreatePlayer);
+    const { execute: CreateMatchMutation } = useMutation(StartMatch);
     // const { execute: deletePlayerQuery } = useMutation(DeletePlayer);
 
     // const loadMatches = async () => {
@@ -19,8 +19,8 @@ export default function useMatches() {
     // GetMatches().then(() => loading.value = false)
 
     const createMatch = async (variables) => {
-        console.log(variables)
-        // let { data: { createPlayer } } = await createPlayerQuery({ input: variables });
+        let { data } = await CreateMatchMutation({ input: variables });
+        console.log(data)
         // let { id, nickname, created_on, name, photo_url } = createPlayer
         // let newPlayer = { id, nickname, created_on, name, photo_url }
 

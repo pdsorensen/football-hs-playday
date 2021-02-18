@@ -48,7 +48,7 @@ export default {
   setup() {
     const { players } = usePlayers();
     const { getImageClasses } = useFormUtilities();
-    const { matches } = useMatches();
+    const { matches, createMatch } = useMatches();
     console.log(matches);
 
     const teams = reactive({
@@ -95,7 +95,21 @@ export default {
     };
 
     const startMatch = () => {
-      console.log("starting match with: ", teams);
+      let payload = {
+        defence_white: teams.white[0].id,
+        defence_red: teams.red[0].id,
+      };
+
+      // for 2v2.
+      if (teams.white.length > 1) {
+        payload.offence_white = teams.white[1].id;
+      }
+
+      if (teams.red.length > 1) {
+        payload.offence_red = teams.red[1].id;
+      }
+
+      createMatch(payload);
     };
 
     const canSubmit = () => {

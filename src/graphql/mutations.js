@@ -15,3 +15,11 @@ export const CreatePlayer = `
         }
     }
 `;
+
+export const StartMatch = `
+mutation CreateMatch ($input: MatchInput!) {
+    startMatch(input: $input) {
+        id
+    }
+}
+`
