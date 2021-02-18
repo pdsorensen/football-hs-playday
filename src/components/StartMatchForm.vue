@@ -1,60 +1,114 @@
 <template>
   <div class="w-100">
     <div class="mw7-ns center">
-      <h1>Start match</h1>
-      <form>
-        <label for="name" class="f6 b db mb2">Spiller 1</label>
-        <div class="w-20 dib">
-          <img src="./../assets/Kasper.jpg" />
+      <div class="w-100 fl">
+        <h1>Choose players</h1>
+        <label class="f6 b db mb2">Team white</label>
+        <div
+          @click="togglePlayer(player, 'white')"
+          v-for="player in players"
+          :key="player.id"
+          :class="imageClasses(player, 'white')"
+        >
+          <img :src="`./../pictures/${player.photo_url}`" />
         </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Isabel.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Rasmus.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Michael.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Michael.jpg" />
+        <label class="f6 b db mb2">Team Red</label>
+        <div
+          @click="togglePlayer(player, 'red')"
+          v-for="player in players"
+          :key="player.id"
+          :class="imageClasses(player, 'red')"
+        >
+          <img :src="`./../pictures/${player.photo_url}`" />
         </div>
 
-        <label for="name" class="f6 b db mb2">Spiller 2</label>
-        <div class="w-20 dib">
-          <img src="./../assets/Kasper.jpg" />
+        <div class="w-80">
+          <Button
+            :label="'Start match'"
+            :disabled="!canSubmit()"
+            @click="startMatch"
+          />
         </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Isabel.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Rasmus.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Michael.jpg" />
-        </div>
-        <div class="w-20 dib">
-          <img src="./../assets/Michael.jpg" />
-        </div>
-        <div class="w-20"></div>
-        <a
-          @click="startMatch"
-          class="f6 link dim ba ph3 pv2 mb2 dib black bg-white"
-          href="#0"
-          >Begynd Kamp</a
-        >
-      </form>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+import { reactive } from "vue";
+import usePlayers from "./../hooks/usePlayers";
+import useFormUtilities from "./../hooks/useFormUtilities";
+import useMatches from "./../hooks/useMatches";
+import Button from "./Button";
+
 export default {
-  emits: ["matchSelected"],
-  methods: {
-    startMatch: function () {
-      // this.playing = true;
-    },
+  components: {
+    Button,
+  },
+  setup() {
+    const { players } = usePlayers();
+    const { getImageClasses } = useFormUtilities();
+    const { matches } = useMatches();
+    console.log(matches);
+
+    const teams = reactive({
+      white: [],
+      red: [],
+    });
+
+    const togglePlayer = (player, team) => {
+      let exists = existInTeam(player, team);
+
+      if (team === "white" && !exists) {
+        teams.white.push(player);
+      }
+
+      if (team === "red" && !exists) {
+        teams.red.push(player);
+      }
+
+      if (team === "white" && exists) {
+        teams.white = teams.white.filter((item) => item.id !== player.id);
+      }
+
+      if (team === "red" && exists) {
+        teams.red = teams.red.filter((item) => item.id !== player.id);
+      }
+    };
+
+    const imageClasses = (player, team) => {
+      let exists = existInTeam(player, team);
+      return getImageClasses(exists);
+    };
+
+    const existInTeam = (player, team) => {
+      let result;
+      if (team === "white") {
+        result = teams.white.some((item) => item.id === player.id);
+      }
+
+      if (team === "red") {
+        result = teams.red.some((item) => item.id === player.id);
+      }
+
+      return result;
+    };
+
+    const startMatch = () => {
+      console.log("starting match with: ", teams);
+    };
+
+    const canSubmit = () => {
+      return teams.red.length > 0 && teams.white.length > 0;
+    };
+
+    return {
+      togglePlayer,
+      players,
+      canSubmit,
+      imageClasses,
+      startMatch,
+    };
   },
 };
 </script>

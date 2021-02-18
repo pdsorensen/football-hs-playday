@@ -1,18 +1,21 @@
 <template >
   <div @click="playSound">
-    <!-- <FootballResults :red="goals_red" :white="goals_white" /> -->
-
     <div>
       <router-link to="/players/create">Create player</router-link>
       <router-link to="/matches/current">Current match</router-link>
+      <router-link to="/">Start match</router-link>
     </div>
 
-    <router-view v-slot="{ Component }">
-      <!-- Use any custom transition and fallback to `fade` -->
-      <!-- <transition name="fade"> -->
-      <component :is="Component" />
-      <!-- </transition> -->
-    </router-view>
+    <Suspense>
+      <template #default>
+        <router-view v-slot="{ Component }">
+          <component :is="Component" />
+        </router-view>
+      </template>
+      <template #fallback>
+        <span>I'm a loading screen, I'm waiting the view to be ready!</span>
+      </template>
+    </Suspense>
   </div>
 </template>
 

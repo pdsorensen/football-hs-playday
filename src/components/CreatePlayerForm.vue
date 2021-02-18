@@ -21,7 +21,7 @@
 
       <div
         @click="setImageUrl(image)"
-        :class="getImageClasses(image)"
+        :class="getImageClasses(image === photo_url)"
         v-for="image in images"
         :key="image"
       >
@@ -57,6 +57,7 @@
 import { ref } from "vue";
 import PlayerList from "./PlayerList";
 import usePlayers from "./../hooks/usePlayers";
+import useFormUtilities from "./../hooks/useFormUtilities";
 
 export default {
   name: "App",
@@ -88,19 +89,10 @@ export default {
     let name = ref("");
     let photo_url = ref("");
 
-    const getImageClasses = (image) => {
-      let basesClasses = "w-20 dib glow ";
-
-      if (image === photo_url.value) {
-        return basesClasses + "o-100";
-      }
-
-      return basesClasses + "o-50";
-    };
-
     const setImageUrl = (image) => (photo_url.value = image);
 
     const { players, createPlayer } = usePlayers();
+    const { getImageClasses } = useFormUtilities();
 
     return {
       players,

@@ -13,7 +13,7 @@ export default function usePlayers() {
 
     const loadPlayers = async () => {
         const { data } = await useQuery({ query: GetPlayers });
-        players.value = data.value.getPlayers
+        setTimeout(async () => players.value = data.value.getPlayers, 2000);
     }
 
     loadPlayers().then(() => loading.value = false)
