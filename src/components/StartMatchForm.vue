@@ -45,7 +45,7 @@ export default {
   components: {
     Button,
   },
-  setup() {
+  async setup() {
     const { players } = usePlayers();
     const { getImageClasses } = useFormUtilities();
     const { createMatchAndRedirect } = useMatches();

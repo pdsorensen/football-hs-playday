@@ -1,7 +1,6 @@
   
 <template>
   <div>
-    {{ isCreating }}
     <div v-if="isCreating">Creating match</div>
     <StartMatchForm v-else />
   </div>

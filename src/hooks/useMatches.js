@@ -6,7 +6,7 @@ import { GetMatches } from "./../graphql/queries.js";
 
 const matches = ref([])
 
-export default async function useMatches() {
+export default function useMatches() {
     const loading = ref(true)
 
     const router = useRouter()
@@ -30,7 +30,9 @@ export default async function useMatches() {
     }
 
     const createMatchAndRedirect = async (variables) => {
-        await CreateMatchMutation({ input: variables });
+        const { data: { startMatch } } = await CreateMatchMutation({ input: variables });
+        let { id, start_time, is_active } = startMatch
+        matches.value = matches.value.concat({ id, start_time, is_active })
         router.push("/matches/current")
     };
 
