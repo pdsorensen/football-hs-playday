@@ -7,13 +7,11 @@ import { GetMatches } from "./../graphql/queries.js";
 const matches = ref([])
 
 export default async function useMatches() {
-    const router = useRouter()
     const loading = ref(true)
 
-
+    const router = useRouter()
     const { execute: CreateMatchMutation } = useMutation(StartMatch);
     const { execute: EndMatchMutation } = useMutation(EndMatch);
-    // const { execute: deletePlayerQuery } = useMutation(DeletePlayer);
 
     const getMatches = async () => {
         const { data } = await useQuery({ query: GetMatches });
@@ -36,13 +34,12 @@ export default async function useMatches() {
         router.push("/matches/current")
     };
 
-
     getMatches().then(() => loading.value = false)
 
     return {
         loading: computed(() => loading.value),
         matches: computed(() => matches.value),
-        endMatch,
-        createMatchAndRedirect
+        createMatchAndRedirect,
+        endMatch
     }
 }
