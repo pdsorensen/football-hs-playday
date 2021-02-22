@@ -2,6 +2,7 @@
   <div @click="playSound">
     <div>
       <router-link to="/players/create">Create player</router-link>
+      <router-link to="/matches">Matches</router-link>
       <router-link to="/matches/current">Current match</router-link>
       <router-link to="/">Start match</router-link>
     </div>
@@ -56,7 +57,8 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white;
-  background: url("./assets/background.png") no-repeat center center fixed;
+  background: black;
+  /* background: url("./assets/background.png") no-repeat center center fixed; */
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;

@@ -48,8 +48,7 @@ export default {
   setup() {
     const { players } = usePlayers();
     const { getImageClasses } = useFormUtilities();
-    const { matches, createMatch } = useMatches();
-    console.log(matches);
+    const { createMatchAndRedirect } = useMatches();
 
     const teams = reactive({
       white: [],
@@ -109,12 +108,10 @@ export default {
         payload.offence_red = teams.red[1].id;
       }
 
-      createMatch(payload);
+      createMatchAndRedirect(payload);
     };
 
-    const canSubmit = () => {
-      return teams.red.length > 0 && teams.white.length > 0;
-    };
+    const canSubmit = () => teams.red.length > 0 && teams.white.length > 0;
 
     return {
       togglePlayer,

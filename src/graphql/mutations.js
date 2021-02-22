@@ -23,3 +23,10 @@ mutation CreateMatch ($input: MatchInput!) {
     }
 }
 `
+export const EndMatch = `
+mutation EndMatch($id: String) {
+    forceEndMatch(id:$id) {
+      id
+    }
+  }
+`

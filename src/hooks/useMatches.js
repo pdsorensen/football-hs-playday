@@ -1,40 +1,48 @@
 import { ref, computed } from "vue";
-import { useMutation } from "villus";
-import { StartMatch } from "./../graphql/mutations.js";
-// import { GetMatches } from "./../graphql/queries.js";
+import { useMutation, useQuery } from "villus";
+import { StartMatch, EndMatch } from "./../graphql/mutations.js";
+import { useRouter } from 'vue-router'
+import { GetMatches } from "./../graphql/queries.js";
 
 const matches = ref([])
 
-export default function useMatches() {
+export default async function useMatches() {
+    const router = useRouter()
     const loading = ref(true)
 
+
     const { execute: CreateMatchMutation } = useMutation(StartMatch);
+    const { execute: EndMatchMutation } = useMutation(EndMatch);
     // const { execute: deletePlayerQuery } = useMutation(DeletePlayer);
 
-    // const loadMatches = async () => {
-    //     const { data } = await useQuery({ query: GetMatches });
-    //     matches.value = data.value.getMatches
-    // }
+    const getMatches = async () => {
+        const { data } = await useQuery({ query: GetMatches });
+        matches.value = data.value.getMatches
+    }
 
-    // GetMatches().then(() => loading.value = false)
+    const endMatch = async (id) => {
+        await EndMatchMutation({ id });
+        matches.value = matches.value.map(match => {
+            if (match.id === id) {
+                match.is_active = false
+            }
 
-    const createMatch = async (variables) => {
-        let { data } = await CreateMatchMutation({ input: variables });
-        console.log(data)
-        // let { id, nickname, created_on, name, photo_url } = createPlayer
-        // let newPlayer = { id, nickname, created_on, name, photo_url }
+            return match
+        })
+    }
 
-        // players.value = players.value.concat(newPlayer)
+    const createMatchAndRedirect = async (variables) => {
+        await CreateMatchMutation({ input: variables });
+        router.push("/matches/current")
     };
 
-    // const deletePlayer = async (id) => {
-    //     await deletePlayerQuery({ id });
-    //     players.value = players.value.filter((player) => player.id != id);
-    // };
+
+    getMatches().then(() => loading.value = false)
 
     return {
         loading: computed(() => loading.value),
         matches: computed(() => matches.value),
-        createMatch
+        endMatch,
+        createMatchAndRedirect
     }
 }

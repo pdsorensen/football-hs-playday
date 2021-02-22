@@ -10,3 +10,13 @@ export const GetPlayers = `
     }`
     ;
 
+export const GetMatches = `
+query getMatches {
+    getMatches {
+      id
+      is_active
+      start_time
+    }
+  }`
+    ;
+
