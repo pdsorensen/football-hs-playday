@@ -15,7 +15,6 @@ export default {
   },
   async setup() {
     const { loading } = await useMatches();
-    console.log("HM", loading);
 
     return { loading };
   },

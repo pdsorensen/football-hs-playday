@@ -8,7 +8,7 @@ export const GetPlayers = `
             name
         }
     }`
-    ;
+  ;
 
 export const GetMatches = `
 query getMatches {
@@ -16,7 +16,26 @@ query getMatches {
       id
       is_active
       start_time
+      end_time
+      final_score_white
+      final_score_red
+      player_defence_red {
+        nickname
+        photo_url
+      }
+      player_defence_white {
+        nickname
+        photo_url
+      }
+      player_offence_red {
+        nickname
+        photo_url
+      }
+      player_offence_white {
+        nickname
+        photo_url
+      }
     }
   }`
-    ;
+  ;
 

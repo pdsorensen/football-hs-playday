@@ -58,12 +58,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   color: white;
   background: black;
-  /* background: url("./assets/background.png") no-repeat center center fixed; */
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  height: 100vh;
 }
 
 .fade-enter-active,
