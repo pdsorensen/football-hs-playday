@@ -1,10 +1,14 @@
 <template >
-  <div @click="playSound">
-    <div>
-      <router-link to="/players/create">Create player</router-link>
-      <router-link to="/matches">Matches</router-link>
-      <router-link to="/matches/current">Current match</router-link>
-      <router-link to="/">Start match</router-link>
+  <div @click="playSound" class="pa4 w-80 center">
+    <div class="f4 mb4">
+      <router-link class="pr2 dim white" to="/players/create"
+        >Create player</router-link
+      >
+      <router-link class="pr2 dim white" to="/matches">Matches</router-link>
+      <router-link class="pr2 dim white" to="/matches/current"
+        >Current match</router-link
+      >
+      <router-link class="pr2 dim white" to="/">Start match</router-link>
     </div>
 
     <Suspense>
@@ -45,7 +49,7 @@ export default {
 
   setup() {
     useClient({
-      url: "https://hs-fusball-iot-project.azurewebsites.net/api/gql-api",
+      url: "https://halfspace-fusball.azurewebsites.net/api/gql-api",
     });
   },
 };
@@ -57,7 +61,10 @@ export default {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: white;
-  background: black;
+  background: gray;
+}
+body {
+  background: gray;
 }
 
 .fade-enter-active,

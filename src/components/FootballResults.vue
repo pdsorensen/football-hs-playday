@@ -33,7 +33,7 @@
 <script>
 // import moment from "moment";
 import { ref } from "vue";
-const signalR = require("@microsoft/signalr");
+// const signalR = require("@microsoft/signalr");
 
 export default {
   name: "Results",
@@ -65,18 +65,18 @@ export default {
     const white = ref(0);
 
     // signalr
-    let connection = connect();
+    // let connection = connect();
 
-    connection.on("updated", (goal) => {
-      console.log(goal);
-      if (goal.teamId == "White") {
-        white.value++;
-      }
+    // connection.on("updated", (goal) => {
+    //   console.log(goal);
+    //   if (goal.teamId == "White") {
+    //     white.value++;
+    //   }
 
-      if (goal.teamId == "Red") {
-        red.value++;
-      }
-    });
+    //   if (goal.teamId == "Red") {
+    //     red.value++;
+    //   }
+    // });
 
     // fetch initial goals
 
@@ -84,24 +84,24 @@ export default {
   },
 };
 
-const connect = () => {
-  const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
+// const connect = () => {
+//   const connectionUrl = "https://hs-fusball-iot-project.azurewebsites.net";
 
-  const connection = new signalR.HubConnectionBuilder()
-    .withUrl(`${connectionUrl}/api`)
-    .build();
+//   const connection = new signalR.HubConnectionBuilder()
+//     .withUrl(`${connectionUrl}/api`)
+//     .build();
 
-  connection.onclose(() => {
-    console.log("SignalR connection disconnected");
-    setTimeout(() => this.connect(), 2000);
-  });
+//   connection.onclose(() => {
+//     console.log("SignalR connection disconnected");
+//     setTimeout(() => this.connect(), 2000);
+//   });
 
-  connection.start().then(() => {
-    console.log("SignalR connection established");
-  });
+//   connection.start().then(() => {
+//     console.log("SignalR connection established");
+//   });
 
-  return connection;
-};
+//   return connection;
+// };
 </script>
 
 <style scoped>
