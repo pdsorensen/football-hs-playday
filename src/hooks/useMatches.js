@@ -33,7 +33,7 @@ export default function useMatches() {
         const { data: { startMatch } } = await CreateMatchMutation({ input: variables });
         let { id, start_time, is_active } = startMatch
         matches.value = matches.value.concat({ id, start_time, is_active })
-        router.push("/matches/current")
+        router.push("/matches")
     };
 
     getMatches().then(() => loading.value = false)

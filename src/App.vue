@@ -5,9 +5,9 @@
         >Create player</router-link
       >
       <router-link class="pr2 dim white" to="/matches">Matches</router-link>
-      <router-link class="pr2 dim white" to="/matches/current"
+      <!-- <router-link class="pr2 dim white" to="/matches/current"
         >Current match</router-link
-      >
+      > -->
       <router-link class="pr2 dim white" to="/">Start match</router-link>
     </div>
 
